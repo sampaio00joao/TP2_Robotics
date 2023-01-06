@@ -12,9 +12,15 @@ start(mymotor2);
 start(mymotor3);
 start(mymotor4);
 
-for i=1:1
-    j1 = readRotation(mymotor1) % Read rotation counter in degrees
+% reset motors
+% mymotor1.resetRotation;
+% mymotor2.resetRotation;
+% mymotor3.resetRotation;
+% mymotor4.resetRotation;
+
+while 1
+%     j1 = readRotation(mymotor1) % Read rotation counter in degrees
     j2 = readRotation(mymotor2) % Read rotation counter in degrees
-    j3 = readRotation(mymotor3) % Read rotation counter in degrees
-    j4 = readRotation(mymotor4) % Read rotation counter in degrees
+%     j3 = readRotation(mymotor3) % Read rotation counter in degrees
+%     j4 = readRotation(mymotor4) % Read rotation counter in degrees
 end
