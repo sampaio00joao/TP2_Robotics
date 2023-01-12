@@ -18,29 +18,7 @@ start(mymotor3);
 start(mymotor4);
 
 %% Home Sequence
-% negative speed / base
-while readTouch(mytouch2) == 0
-    mymotor1.Speed = 20; % activate the motor with the calculated speed
-    if readRotation(mymotor1) > 20
-         mymotor1.Speed = 10; % activate the motor with the calculated speed
-    end
-end
-pause(1);
-% positive speed / elbow
-while readTouch(mytouch3) == 0
-    mymotor2.Speed = 10; % activate the motor with the calculated speed
-end
-pause(1);
-% negative speed / wrist
-while readTouch(mytouch1) == 0
-    readRotation(mymotor3)
-    mymotor3.Speed = -20; % activate the motor with the calculated speed
-    if readRotation(mymotor3) > 20
-         mymotor3.Speed = -10; % activate the motor with the calculated speed
-    end
-end
-readTouch(mytouch1)
-pause(1);
+homeSequence(mymotor1,mymotor2,mymotor3,mytouch1,mytouch2,mytouch3);
 
 %% Reset Robot
 mymotor1.resetRotation;
@@ -48,58 +26,63 @@ mymotor2.resetRotation;
 mymotor3.resetRotation;
 mymotor4.resetRotation;
 
+%% Camera
+pos = imThreshold();
 %% Robot Movements
-% Elbow
-while 1
-    %{ 
-        Go to -350 motor degrees = 90 degrees cartesian
-        Since the movement is negative, the motor speed is negative as well
-        Stop the motor when the position has been reached.
-        Start it again so it can be used in the next movement.
-    %}
-    if readRotation(mymotor2) > -300
-        readRotation(mymotor2)
-        mymotor2.Speed = -70; % activate the motor with the calculated speed
-    else
-        mymotor2.Speed = 0; % activate the motor with the calculated speed
-        break;
+for i=1:1
+    switch pos
+        case 1
+            position1(mymotor1,mymotor2,mymotor3,mymotor4,mytouch3);
+            % Elbow
+            while 1
+                %{ 
+                    Since the movement is negative, the motor speed is negative as well
+                    Stop the motor when the position has been reached.
+                    Start it again so it can be used in the next movement.
+                %}
+                if readRotation(mymotor2) > -300
+                    readRotation(mymotor2)
+                    mymotor2.Speed = -70; % activate the motor with the calculated speed
+                else
+                    mymotor2.Speed = 0; % activate the motor with the calculated speed
+                    break;
+                end
+            end
+            pause(2);
+            %homeSequence(mymotor1,mymotor2,mymotor3,mytouch1,mytouch2,mytouch3); 
+            pos = 3;
+
+        case 2
+            position2(mymotor1,mymotor2,mymotor3,mymotor4,mytouch3);
+            pause(1);
+            % Elbow
+            while 1
+                %{ 
+                    Since the movement is negative, the motor speed is negative as well
+                    Stop the motor when the position has been reached.
+                    Start it again so it can be used in the next movement.
+                %}
+                if readRotation(mymotor2) > baseAngle
+                    readRotation(mymotor2)
+                    mymotor2.Speed = -80; % activate the motor with the calculated speed
+                else
+                    mymotor2.Speed = 0; % activate the motor with the calculated speed
+                    break;
+                end
+            end
+            pause(1);
+            dropOnBox2(mymotor1,mymotor2,mymotor3,mymotor4,mytouch1,mytouch2,mytouch3);
+            homeSequence(mymotor1,mymotor2,mymotor3,mytouch1,mytouch2,mytouch3); 
+        case 3 
+            dropOnBox(mymotor1,mymotor2,mymotor3,mymotor4,mytouch3);
+            % Wrist
+            while readTouch(mytouch1) == 0
+                readRotation(mymotor3)
+                mymotor3.Speed = -20; % activate the motor with the calculated speed
+                if readRotation(mymotor3) > 20
+                    mymotor3.Speed = -10; % activate the motor with the calculated speed
+                end
+            end
+            homeSequence(mymotor1,mymotor2,mymotor3,mytouch1,mytouch2,mytouch3); 
     end
 end
-pause(2);
-% Base
-while 1 
-    %{ 
-        Go to -350 motor degrees = 90 degrees cartesian
-        Since the movement is negative, the motor speed is negative as well
-        Stop the motor when the position has been reached.
-        Start it again so it can be used in the next movement.
-    %}
-    if readRotation(mymotor1) > -350
-        mymotor1.Speed = -20; % activate the motor with the calculated speed
-    else
-        mymotor1.Speed = 0; % activate the motor with the calculated speed
-        break;
-    end
-end
-pause(2);
-%% Claw Open
-openClaw = 10;
-closeClaw = -10;
-mymotor4.Speed = openClaw; % activate the motor with the calculated speed
-pause(0.2);
-mymotor4.Speed = 0;
-
-%% Elbow Down
-% positive speed / elbow
-while readTouch(mytouch3) == 0
-    mymotor2.Speed = 10; % activate the motor with the calculated speed
-end
-
-%% Claw Close
-pause(2);
-mymotor4.Speed = closeClaw;
-pause(0.2);
-mymotor4.Speed = 0;
-
-%% Store Object
-
