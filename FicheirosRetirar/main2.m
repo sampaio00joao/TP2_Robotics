@@ -50,7 +50,6 @@ valorAngle = (x *90)/30
 % x é a resposta
 lastMotor1 = 0;
 respAngle = (valorAngle*350)/-90;
-respAngle = -respAngle/200
 
 %% Movement to Final Position
 timeStep = [0:0.05:10]';
