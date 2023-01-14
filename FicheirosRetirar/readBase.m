@@ -18,15 +18,15 @@ start(mymotor3);
 start(mymotor4);
 
 % motors
-% mymotor1.resetRotation;
+mymotor1.resetRotation;
 % mymotor2.resetRotation;
-mymotor3.resetRotation;
+% mymotor3.resetRotation;
 % mymotor4.resetRotation;
 
 while 1
 %         readTouch(mytouch)
-%    j1 = readRotation(mymotor1) % Read rotation counter in degrees
+   j1 = readRotation(mymotor1) % Read rotation counter in degrees
 %    j2 = readRotation(mymotor2) % Read rotation counter in degrees
-   j3 = readRotation(mymotor3) % Read rotation counter in degrees
+%    j3 = readRotation(mymotor3) % Read rotation counter in degrees
 %    j4 = readRotation(mymotor4) % Read rotation counter in degrees
 end

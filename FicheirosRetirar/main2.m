@@ -26,47 +26,27 @@ mymotor2.resetRotation;
 mymotor3.resetRotation;
 mymotor4.resetRotation;
 
-%% Joints
-% Create a serial link object for the arm
-L1 = Revolute('d',0.13,'alpha',-pi/2,'qlim', deg2rad([-180 10])); 
-L2 = Revolute('a', -0.19,'qlim', deg2rad([-180 0]));
-L3 = Revolute('alpha',-pi/2,'qlim', deg2rad([-180 0])); 
-robot = SerialLink([L1 L2 L3], 'name', 'EV3 Robot');
-
-%% End Effector
-m_endeffector = SE3(-0.02,0,0.12);
-robot.tool = m_endeffector;
-
 %% Camera
-[x , y] = imThreshold_traj();
+ [x , y] = imThreshold_traj();
 
 %% 3 Simple Rule
 % 30cm - 90 graus
 % X - ?
 % valorCm = resposta da conta anterior
-valorAngle = (x *90)/30
+valorAngle = (x *90)/30;
 % -90 - 350
 % valorCm - x
 % x é a resposta
-lastMotor1 = 0;
-respAngle = (valorAngle*350)/-90;
+respAngle = -180+((valorAngle*350)/-90);
 
 %% Movement to Final Position
-timeStep = [0:0.05:10]';
-qc1 = jtraj([0,0,0], [deg2rad(-valorAngle),deg2rad(0),deg2rad(5)], length(timeStep));
-disp(rad2deg(qc1))
-
-for i=1:200
-        trajWrist = qc1(i,3); % read the position in radians
-        wristAngle =  rad2deg(trajWrist); % convert to degrees
-        if  lastMotor1 > (wristAngle - respAngle)
-                        disp('.')
-            mymotor1.Speed = -20; % activate the motor with the calculated speed
-            
-        elseif trajWrist == respAngle
+while 1
+        if readRotation(mymotor1) > respAngle
+            mymotor1.Speed = -20; % activate the motor with the calculated speed  
+        else
             mymotor1.Speed = 0; % activate the motor with the calculated speed
+            break;
         end
-        lastMotor1 = wristAngle;
 end
     
 % %% Robot Movements

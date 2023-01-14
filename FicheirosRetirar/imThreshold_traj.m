@@ -1,7 +1,9 @@
 function [objPosX,objPosY] = imThreshold_traj()
-    vid = webcam('HD Webcam');
+%     vid = webcam('HD Webcam');
 %     preview(vid);
-    im = snapshot(vid);
+%     im = snapshot(vid);
+    im = imread('CAM_PHOTO.jpg');
+    figure, imshow(im)
     %% Aplicar Filtro Vermelho
     bw2 = createMaskRed(im);
     figure, imshow(bw2)
