@@ -45,3 +45,5 @@ function [objPosX,objPosY] = imThreshold_traj()
     objPosY = (centroid(:,2)*29.7) / imSize(:,2) %Em cm
 end
 
+
+

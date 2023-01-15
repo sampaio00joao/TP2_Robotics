@@ -28,6 +28,7 @@ mymotor4.resetRotation;
 
 %% Camera
 pos = imThreshold();
+
 %% Robot Movements
 for i=1:1
     switch pos
