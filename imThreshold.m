@@ -1,44 +1,39 @@
 function [pos] = imThreshold()
+    %% Setup the camera and take a picture
     vid = webcam('HD Webcam');
-%     preview(vid);
     im = snapshot(vid);
-    %% Aplicar Filtro Vermelho
+    %% Red Filter
     bw2 = createMaskRed(im);
     figure, imshow(bw2)
-    %% Operações Morfológicas
-    matrix = strel('square',10); % elemento estruturante
-    closedIm = imclose(bw2,matrix); % operação de fecho
-    filledIm = imfill(closedIm,'holes'); % preenchimento do interior do Sinal
-    % figure, imshow(filledIm)
-    %% Eliminar blobs de ruído
-    stats =  regionprops(filledIm,'PixelIdxList','Area'); % retirar as areas de todos os blobs detetados na imagem
-    Area = cat(1,stats.Area);
-    % eliminar blobs indesejados / Ruído
-    [maxValue,index] = max([stats.Area]); % guarda a área do maior blob / corresponde ao objeto 
+    %% Image treatment
+    matrix = strel('square',10); % kernel
+    closedIm = imclose(bw2,matrix); % close
+    filledIm = imfill(closedIm,'holes'); % fill
+    %% Eliminate noise
+    stats =  regionprops(filledIm,'PixelIdxList','Area'); % all the blobs become objects
+    Area = cat(1,stats.Area); % get the area
+    [maxValue,index] = max([stats.Area]); % Saves the biggest area / the object
     [rw col]= size(stats);
     for i=1:rw
         if (i~=index)
-            filledIm(stats(i).PixelIdxList) = 0; % remove os blobs que correspondem ao ruído / área menor
+            filledIm(stats(i).PixelIdxList) = 0; % removes every object with a lesser area
         end
     end
-    %% Plot das imagens
-    % imshow(filledIm);
-    % title('Imfill');
-    %% Etiquetar
+    %% Object Quantity
     cc = bwconncomp(filledIm);
     totalObj = cc.NumObjects;
-
-    % Saber a Orientacao da Seta
-    stats =  regionprops(filledIm,'Centroid'); % Centro do Objeto
-    middleColumn = stats.Centroid(2); % Define que o a Linha de Separacao para Contar Pixeis vai a Posicao da Coordenada X do Centroid
-    leftHalf = floor(nnz(filledIm(:,1:middleColumn))); % Contar os Pixeis a Esqueda da Coluna Central
-    rightHalf = floor(nnz(filledIm(:,middleColumn+1:end))); % Contar os Pixeis a Direita da Coluna Central
+    %% Choose position
+    % Count the pixels in the image
+    stats =  regionprops(filledIm,'Centroid'); % Image Centroid
+    middleColumn = stats.Centroid(2); % Imaginary vertical line cutting the image in 2 pieces
+    leftHalf = floor(nnz(filledIm(:,1:middleColumn))); % Count the pixels on the left
+    rightHalf = floor(nnz(filledIm(:,middleColumn+1:end))); % Count the pixels on the right
     if leftHalf < rightHalf 
-        pos = 1;
-        disp("Direita")
+        pos = 1; % go to position 1
+        disp("Right") 
     else 
-        pos = 2;
-        disp("Esquerda") 
+        pos = 2; % go to position 1
+        disp("Left") 
     end
 end
 
