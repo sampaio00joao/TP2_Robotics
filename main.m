@@ -33,7 +33,7 @@ mymotor4.resetRotation;
 %% Camera / Threshold
 % Depending on the user input it will activate the fixed position mode or
 % the random position mode
-prompt = "1. Fixed Position 2. Random position\r\n";
+prompt = "1. Fixed Position 2. Random position\n";
 userInput = input(prompt); % receives data from the user
 if userInput == 1 % Fixed Position Mode
     pos = imThreshold(); % receives pos 1 or 2;
@@ -93,7 +93,7 @@ while breakOut == true % runs until a movement has finished
             angleX = -180+((valueX*350)/-90);
             angleY = ((valueY*350)/80);
             % Movement to the calculated position
-            goToPosition(mymotor1,mymotor2,mymotor4,mytouch3,angleX);
+            goToPosition(mymotor1,mymotor2,mymotor3,mymotor4,mytouch3,angleX);
             dropOnBox(mymotor1,mymotor2,mymotor3,mymotor4,mytouch3); % drops on box 1 / left
             homeSequence(mymotor1,mymotor2,mymotor3,mytouch1,mytouch2,mytouch3);  % goes back to the home position             
             breakOut = false; % break the loop

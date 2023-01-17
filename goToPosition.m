@@ -1,4 +1,4 @@
-function [] = goToPosition(mymotor1,mymotor2,mymotor4,mytouch3,angleX)
+function [] = goToPosition(mymotor1,mymotor2,mymotor3,mymotor4,mytouch3,angleX)
     % Elbow
     while 1
         if readRotation(mymotor2) > -185
@@ -18,6 +18,16 @@ function [] = goToPosition(mymotor1,mymotor2,mymotor4,mytouch3,angleX)
             end
     end
     pause(1);
+    % Wrist
+    while 1 
+        if readRotation(mymotor3) < 65 % motor angle for position 2
+            mymotor3.Speed = 20; % activate the motor with a positive speed
+        else
+            mymotor3.Speed = 0; % stop the motor
+            break;
+        end
+    end
+    pause(2);
      %% Claw Open
     openClaw = 10;
     closeClaw = -10;
